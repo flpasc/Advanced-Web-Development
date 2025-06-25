@@ -6,6 +6,10 @@ const sortByNumberInString = (input: string): string => {
 
 	stringArray.forEach((word: string) => {
 		const number = word.split('').find((char) => char >= '0' && char <= '9')
+
+		//Early return in case numer is undefined
+		if (number === undefined) return
+
 		const index: number = parseInt(number) - 1
 		sortedArray[index] = word
 	})
