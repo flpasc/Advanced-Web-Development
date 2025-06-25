@@ -2,7 +2,7 @@ var input2 = 'is2 Thi1s T4est 3a'
 var sortByNumberInString = function (input) {
 	var stringArray = input.split(' ')
 	var sortedArray = []
-	stringArray.forEach(function (word) {
+	stringArray.forEach((word) => {
 		var number = word.split('').find((char) => {
 			return char >= '0' && char <= '9'
 		})
