@@ -1,5 +1,5 @@
 var input2 = 'is2 Thi1s T4est 3a'
-var sortByNumberInString = function (input) {
+var sortByNumberInString = (input) => {
 	var stringArray = input.split(' ')
 	var sortedArray = []
 	stringArray.forEach((word) => {
