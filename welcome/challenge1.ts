@@ -24,9 +24,15 @@ const usersMeta: User[] = [
 	},
 ]
 
+type UserStatusGroups = {
+	online: string[]
+	offline: string[]
+	away: string[]
+}
+
 // Function to sort users in status groups depending on online status and last activity
-const getAllUserStatus = (usersMeta) =>
-	usersMeta.reduce(
+const getAllUserStatus = (usersMeta: User[]): UserStatusGroups =>
+	usersMeta.reduce<UserStatusGroups>(
 		(acc, user) => {
 			if (user.status === 'online' && user.lastActivity > 100) {
 				acc.away.push(user.username)

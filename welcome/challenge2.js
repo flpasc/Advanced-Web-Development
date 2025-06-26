@@ -1,11 +1,13 @@
+"use strict";
 // Example input
-var maskedInput = 'Password';
-var maskify = function (input) {
+const maskedInput = 'Password';
+const unmaskedPart = 4;
+const maskify = (input) => {
     // Early return in case the input is to short
-    if (input.length < 4)
+    if (input.length < unmaskedPart)
         return '';
-    var visiblePart = input.slice(-4);
-    var maskedPartLength = input.length - 4;
+    const visiblePart = input.slice(-unmaskedPart);
+    const maskedPartLength = input.length - unmaskedPart;
     return '#'.repeat(maskedPartLength) + visiblePart;
 };
 console.log(maskify(maskedInput));
