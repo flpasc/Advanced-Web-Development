@@ -1,12 +1,13 @@
 // Example input
 const maskedInput: string = 'Password'
+const unmaskedPart = 4
 
 const maskify = (input: string): string => {
 	// Early return in case the input is to short
-	if (input.length < 4) return ''
+	if (input.length < unmaskedPart) return ''
 
-	const visiblePart = input.slice(-4)
-	const maskedPartLength = input.length - 4
+	const visiblePart = input.slice(-unmaskedPart)
+	const maskedPartLength = input.length - unmaskedPart
 	return '#'.repeat(maskedPartLength) + visiblePart
 }
 
