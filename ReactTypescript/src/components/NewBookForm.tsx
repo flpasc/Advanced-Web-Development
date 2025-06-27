@@ -10,6 +10,9 @@ export default function NewBookForm({ onAddBook }: BookFormProps) {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
+
+		if (title.trim() === '' || author.trim() === '') return
+
 		onAddBook(title.trim(), author.trim())
 		setTitle('')
 		setAuthor('')
