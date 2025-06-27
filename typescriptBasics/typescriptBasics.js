@@ -6,7 +6,7 @@ for (let i = 0; i < age; i++) {
         console.log('Is 18');
 }
 const score = 0;
-if (score !== 0)
+if (score != 0)
     console.log('Score is available');
 if (score)
     console.log('Score is evaluated as truthy');
@@ -14,7 +14,7 @@ const username = '';
 if (username)
     console.log('Username is available');
 if (!username)
-    console.log('Username is avaluated falsy');
+    console.log('Username is evaluated falsy');
 const isAdmin = false;
 if (isAdmin)
     console.log('isAdmin is evaluated truthly');
