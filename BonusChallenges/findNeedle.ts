@@ -1,5 +1,5 @@
 const findNeedle = (input: string[]): string => {
-	const needle = 'needle'
+	const needle: string = 'needle'
 
 	const index = input.findIndex((item) => item === needle)
 	return index >= 0 ? `Needle found at ${index}` : `Needle not found`
