@@ -5,8 +5,7 @@ interface Profile {
 }
 
 const getEmail = (profile: Profile): string => {
-	if (profile.contact.email) return profile.contact.email
-	return 'No email provided'
+	return profile.contact.email ?? 'Non email provided'
 }
 
 const person: Profile = {
