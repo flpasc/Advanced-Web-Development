@@ -1,3 +1,3 @@
 export const isPalindrom = (value: string): boolean => {
-	return value.split('').reverse().join('') === value
+	return value.trim().split('').reverse().join('') === value
 }
