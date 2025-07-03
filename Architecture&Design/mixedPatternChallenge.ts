@@ -11,17 +11,17 @@ interface Subscriber {
 class CartObserver {
 	private subscribers: Subscriber[] = []
 
-	subscribe(sub: Subscriber) {
+	subscribe(sub: Subscriber): void {
 		this.subscribers.push(sub)
 	}
 
-	unsubscribe(sub: Subscriber) {
+	unsubscribe(sub: Subscriber): void {
 		this.subscribers = this.subscribers.filter(
 			(subscriber) => subscriber !== sub,
 		)
 	}
 
-	notify() {
+	notify(): void {
 		this.subscribers.forEach((sub) => sub())
 	}
 }
@@ -115,7 +115,7 @@ class ShoppingCart {
 		this.observer.subscribe(fn)
 	}
 
-	unsubscribe(fn: Subscriber) {
+	unsubscribe(fn: Subscriber): void {
 		this.observer.unsubscribe(fn)
 	}
 
