@@ -1,0 +1,64 @@
+{% from './macros/inputField.njk' import inputField %}
+{% from './macros/textarea.njk' import textarea %}
+{% extends "_baseLayout.njk" %}
+{% block body %}
+  <main class="mb-4">
+    <div class="container px-4 px-lg-5">
+      <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+          <p>
+            Want to get in touch? Fill out the form below to send me a message
+            and I will get back to you as soon as possible!
+          </p>
+          <div class="my-5">
+            <!-- * * * * * * * * * * * * * * *-->
+            <!-- * * SB Forms Contact Form * *-->
+            <!-- * * * * * * * * * * * * * * *-->
+            <!-- This form is pre-integrated with SB Forms.-->
+            <!-- To make this form functional, sign up at-->
+            <!-- https://startbootstrap.com/solution/contact-forms-->
+            <!-- to get an API token!-->
+            <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+              {{ inputField(id="name", name="name", label="Name", placeholder='Enter your name', required=true) }}
+              {{ inputField(id="email", name="email", label='Email', type="email", placeholder="Enter your email", required=true, validation='email') }}
+              {{ inputField(id='phone', name='phone', label="Phone Number", type='tel', placeholer="Enter your phone number",  required=true) }}
+              {{ textarea(id='message', name="message", label='Message', required=true, placeholder='Enter your message here') }}
+              <br />
+              <!-- Submit success message-->
+              <!---->
+              <!-- This is what your users will see when the form-->
+              <!-- has successfully submitted-->
+              <div class="d-none" id="submitSuccessMessage">
+                <div class="text-center mb-3">
+                  <div class="fw-bolder">Form submission successful!</div>
+                  To activate this form, sign up at
+                  <br />
+                  <a href="https://startbootstrap.com/solution/contact-forms">
+                    https://startbootstrap.com/solution/contact-forms
+                  </a>
+                </div>
+              </div>
+              <!-- Submit error message-->
+              <!---->
+              <!-- This is what your users will see when there is-->
+              <!-- an error submitting the form-->
+              <div class="d-none" id="submitErrorMessage">
+                <div class="text-center text-danger mb-3">
+                  Error sending message!
+                </div>
+              </div>
+              <!-- Submit Button-->
+              <button
+                class="btn btn-primary text-uppercase disabled"
+                id="submitButton"
+                type="submit"
+              >
+                Send
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}

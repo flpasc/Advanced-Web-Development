@@ -1,0 +1,22 @@
+{% macro textarea(id, name='', label='', placeholder='', required=false) %}
+<div class="form-floating">
+  <textarea
+    class="form-control"
+    id="{{ id }}"
+    name="{{ name }}"
+    placeholder="{{ placeholder }}"
+    style="height: 12rem"
+    {% if required %}
+      data-sb-validations="required"
+    {% endif %}
+  ></textarea>
+
+  <label for="{{ id }}">{{ label }}</label>
+
+  {% if required %}
+    <div class="invalid-feedback" data-sb-feedback="{{ name }}:required">
+      A {{ label }} is required.
+    </div>
+  {% endif %}
+</div>
+{% endmacro %}

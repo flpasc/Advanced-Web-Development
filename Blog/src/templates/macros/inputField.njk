@@ -1,0 +1,23 @@
+{%  macro inputField(id, name, label, type='text', placeholder='', required=false) %}
+<div class="form-floating">
+
+  <input
+    class="form-control"
+    id="{{ id }}"
+    name="{{ name }}"
+    type="{{ type }}"
+    placeholder="{{placeholder}}"
+    {% if required %}
+      data-sb-validations="required"
+    {% endif %}
+  />
+
+  <label for="{{ id }}">{{ label }}</label>
+
+  {% if required %}
+    <div class="invalid-feedback" data-sb-feedback="{{ name }}:required">
+      A {{ label }} is required.
+  </div>
+  {% endif %}
+</div>
+{% endmacro %}
