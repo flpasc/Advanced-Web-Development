@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import blogPosts from '../data/blogPosts.json'
+
+const formatDate = (timestamp: number): string => {
+  return new Date(timestamp * 1000).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+---
+
+<Layout title="Clean Blog" teaser="A Blog by Start Bootstrap" image={'home-bg.jpg'}>
+  <!-- Main Content-->
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+				{blogPosts.map(blogPost=> (
+ 					<div class="post-preview">
+            <a href="posts/">
+              <h2 class="post-title">{ blogPost.title }</h2>
+              <h3 class="post-subtitle">{ blogPost.teaser }</h3>
+            </a>
+            <p class="post-meta">
+              Posted by
+              <a href="#!">{ blogPost.author }</a>
+              on { formatDate(blogPost.createdAt) }
+            </p>
+          </div>
+          <hr class="my-4" />
+				))}
+        <div class="d-flex justify-content-end mb-4">
+          <a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,29 @@
+---
+type textareaProps = {
+  id:string
+  name: string
+  label: string
+  placeholder?:string
+  required?: boolean
+}
+const {id, name, label='', placeholder='', required=false} = Astro.props
+
+---
+<div class="form-floating">
+  <textarea
+    class="form-control"
+    id={id}
+    name={name}
+    placeholder={placeholder}
+    style="height: 12rem"
+    {...(required ? {'data-sb-validations': 'required'} : {})}
+  ></textarea>
+
+  <label for={ id }>{ label }</label>
+
+  {required && (
+    <div class="invalid-feedback" data-sb-feedback={`${ name }:required`}>
+      A { label } is required.
+    </div>
+  )}
+</div>

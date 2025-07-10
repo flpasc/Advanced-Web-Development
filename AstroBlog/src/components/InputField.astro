@@ -1,0 +1,38 @@
+---
+type InputProps = {
+  id: string
+  name: string
+  label: string
+  type?: 'text' | 'email' | 'tel' | 'password' | 'number' | 'url' | 'search' // restrict to valid HTML input types
+  placeholder?: string
+  required?: boolean
+}
+
+const {
+  id,
+  name,
+  label,
+  type = 'text',
+  placeholder = '',
+  required = false
+} = Astro.props as InputProps;
+---
+
+<div class="form-floating">
+  <input
+    class="form-control"
+    id={ id }
+    name={ name }
+    type={ type }
+    placeholder={ placeholder }
+    {...(required ? { 'data-sb-validations': 'required' } : {})}
+  />
+
+  <label for={ id }>{ label }</label>
+
+  {required && (
+    <div class="invalid-feedback" data-sb-feedback={`${ name }:required`}>
+      A { label } is required.
+    </div>
+  )}
+</div>
