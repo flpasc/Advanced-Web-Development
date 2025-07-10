@@ -59,7 +59,7 @@ app.get("/posts/:id", (req, res) => {
 app.get("/", (req, res) => {
   res.render("home.njk", {
     title: "Home",
-    headerImage: "assets/images/home-bg.jpg",
+    headerImage: "/assets/images/home-bg.jpg",
     blogPosts: blogPosts.map((post) => ({
       ...post,
       formatedDate: formatDate(post.createdAt),
