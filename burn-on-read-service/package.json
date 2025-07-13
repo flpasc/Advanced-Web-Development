@@ -1,0 +1,33 @@
+{
+	"name": "burn-on-read-service",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "nodemon",
+		"watch:scss": "sass --watch --load-path=node_modules src/scss:public/css",
+		"build": "sass --load-path=node_modules src/scss:public/css"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"@picocss/pico": "^2.1.1",
+		"cors": "^2.8.5",
+		"dotenv": "^17.2.0",
+		"express": "^5.1.0",
+		"nodemon": "^3.1.10",
+		"nunjucks": "^3.2.4",
+		"sass": "^1.89.2",
+		"slugify": "^1.6.6",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.8.3",
+		"uuid": "^11.1.0"
+	},
+	"devDependencies": {
+		"@types/cors": "^2.8.19",
+		"@types/express": "^5.0.3",
+		"@types/nunjucks": "^3.2.6"
+	}
+}

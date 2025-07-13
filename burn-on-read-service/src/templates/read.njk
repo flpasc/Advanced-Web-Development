@@ -1,0 +1,11 @@
+{% from './macros/textarea.njk' import textarea %}
+{% extends "_baseLayout.njk" %}
+{% block body %}
+  <main class="container-main" style="background-image: url('/assets/images/header-bg.png')">
+    <div class="main-content">
+      <div class="output-container">
+        {{ textarea(id="user-output", name="user-output", label="Your secret message", placeholder=content, disabled=true)  }}
+      </div>
+    </div>
+  </main>
+{% endblock %}

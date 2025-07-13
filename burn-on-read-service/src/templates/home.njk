@@ -1,0 +1,14 @@
+{% from './macros/textarea.njk' import textarea %}
+{% extends "_baseLayout.njk" %}
+{% block body %}
+  <main class="container-main" style="background-image: url('/assets/images/header-bg.png')">
+    <div class="main-content">
+      <div class="input-container">
+        <form action="/create-message", method="POST">
+          {{ textarea(id="message", name="message", label="", placeholder="Enter text message") }}
+          <button type="submit">Submit Messsage</button>
+        </form>
+      </div>
+    </div>
+  </main>
+{% endblock %}
