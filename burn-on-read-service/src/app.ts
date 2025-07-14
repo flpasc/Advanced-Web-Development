@@ -48,7 +48,7 @@ async function burnAfterRead(req: Request, res: Response, next: NextFunction): P
   const filePath = path.join(messagesDir, `${req.params.id}.txt`);
   try {
     res.locals.content = await readFile(filePath, 'utf8');
-    await unlink(filePath);         // delete immediately
+    await unlink(filePath);         
     return next();
   } catch {
 		res.render('read.njk', { content: 'Message not found or deleted.' })
