@@ -1,31 +1,20 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import express, { Request, Response } from 'express'
-import { access, constants, mkdir } from 'node:fs/promises';
+import express, { NextFunction, Request, Response } from 'express'
+import { access, constants, mkdir, readFile, unlink, writeFile } from 'node:fs/promises';
 import nunjucks from 'nunjucks'
 import { v4 as uuidv4 } from 'uuid';
+import { escape } from 'lodash';
 import cors from 'cors'
 import path from 'path'
-import fs from 'fs'
 
 
 const port = process.env.PORT || 3333
 const messagesDir = path.join(__dirname, '../messages')
 
-async function doesMessageDirExist(): Promise<void>{
-	try {
-		await access(messagesDir, constants.F_OK);
-		console.log('Directory exists')
-	} catch (error) {
-		console.log('Directory does NOT exist, creating new')
-		mkdir(messagesDir)
-	}
-}
-
-doesMessageDirExist()
-
 const app = express()
+
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/css', express.static('node_modules/@picocss/pico/css'));
 app.use(express.urlencoded({ extended: true }));
@@ -35,35 +24,55 @@ nunjucks.configure('src/templates/', {
 	express: app
 });
 
-
-
-app.get('/', (req: Request, res: Response) => {
-	res.render('home.njk')
-})
-
-app.post('/create-message', (req, res) => {
-	const {message} = req.body
-	const id = uuidv4()
-
-	const filePath = path.join(messagesDir,`${id}.txt` )
-	fs.writeFileSync(filePath, message)
-	const link = `${req.protocol}://${req.get('host')}/read/${id}`;
-	res.render('create-message.njk', { link })
-})
-
-app.get('/read/:id', (req, res) => {
-	const id = req.params.id
-	const filePath = path.join(messagesDir, `${id}.txt`)
-
-	if (fs.existsSync(filePath)) {
-    const content = fs.readFileSync(filePath, 'utf-8');
-    fs.unlinkSync(filePath); // Delete the file immediately
-    res.render('read.njk', { content });
-  } else {
-    res.status(404).send('Message not found or already deleted.');
+// Check for messages DIR
+(async () => {
+  try {
+    await access(messagesDir, constants.F_OK);
+    console.log('messages/ DIR exists');
+  } catch {
+    await mkdir(messagesDir, { recursive: true });
+    console.log('messages/ DIR created');
   }
-})
+})();
 
+// Helper
+async function createMessage(req: Request): Promise<string> {
+  const id = uuidv4();
+  const filePath = path.join(messagesDir, `${id}.txt`);
+	const message = escape(req.body.message.trim())
+  await writeFile(filePath, message ?? '');
+  return `${req.protocol}://${req.get('host')}/read/${id}`;
+}
+
+async function burnAfterRead(req: Request, res: Response, next: NextFunction): Promise<void> {
+  const filePath = path.join(messagesDir, `${req.params.id}.txt`);
+  try {
+    res.locals.content = await readFile(filePath, 'utf8');
+    await unlink(filePath);         // delete immediately
+    return next();
+  } catch {
+		res.render('read.njk', { content: 'Message not found or deleted.' })
+  }
+}
+
+
+// Routes
+app.get('/', (_req, res) => {
+  res.render('home.njk');
+});
+
+app.post('/create-message', async (req, res) => {
+  const link = await createMessage(req);
+  res.render('create-message.njk', { link });
+});
+
+app.get('/read/:id', burnAfterRead, (req, res) => {
+  res.render('read.njk', { content: res.locals.content });
+});
+
+
+
+// Start listening on port
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`)
 })

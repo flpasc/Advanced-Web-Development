@@ -2823,6 +2823,10 @@ textarea,
   border-radius: 5px;
 }
 
+.output-container label {
+  color: white;
+}
+
 .navbar {
   position: absolute;
   top: 40px;
