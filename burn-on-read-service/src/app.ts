@@ -72,7 +72,7 @@ app.get('/read/:id', burnAfterRead, (req, res) => {
 
 
 
-// Start listening on port
+// Start app on port
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`)
 })
