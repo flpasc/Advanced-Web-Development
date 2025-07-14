@@ -1,7 +1,7 @@
-{% macro textarea(id, name='', label='', placeholder='', disabled=false) %}
+{% macro textarea(id, name='', label='', placeholder='', disabled=false, content='') %}
   {% if label %}
     <label for="{{ id }}">{{ label }}</label>
   {% endif %}
   <textarea id="{{ id }}" name="{{ name }}" placeholder="{{ placeholder }}"
-    {% if disabled %}disabled{% endif %}></textarea>
+    {% if disabled %}disabled{% endif %}>{{ content }}</textarea>
 {% endmacro %}

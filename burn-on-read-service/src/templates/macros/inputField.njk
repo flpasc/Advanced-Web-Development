@@ -1,0 +1,4 @@
+{% macro inputField(id, name='', type='text', placeholder='', label='') %}
+  <label for="{{ id }}">{{ label }}</label>
+  <input id="{{ id }}" name="{{ name }}" type="{{ type }}" placeholder="{{ placeholder }}" >
+{% endmacro %}

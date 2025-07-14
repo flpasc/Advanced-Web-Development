@@ -8,68 +8,79 @@ import { v4 as uuidv4 } from 'uuid';
 import { escape } from 'lodash';
 import cors from 'cors'
 import path from 'path'
+import { FILE } from 'node:dns';
 
-
-const port = process.env.PORT || 3333
-const messagesDir = path.join(__dirname, '../messages')
 
 const app = express()
+const port = process.env.PORT || 3333
+const FILE_DIR = path.join(__dirname, '..', '/messages/')
+const FILE_SUFFIX = '.txt'
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/css', express.static('node_modules/@picocss/pico/css'));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}))
 app.use(cors())
 nunjucks.configure('src/templates/', {
 	autoescape: true,
 	express: app
 });
 
-// Check for messages DIR
-(async () => {
-  try {
-    await access(messagesDir, constants.F_OK);
-    console.log('messages/ DIR exists');
-  } catch {
-    await mkdir(messagesDir, { recursive: true });
-    console.log('messages/ DIR created');
-  }
-})();
-
-// Helper
-async function createMessage(req: Request): Promise<string> {
-  const id = uuidv4();
-  const filePath = path.join(messagesDir, `${id}.txt`);
-	const message = escape(req.body.message.trim())
-  await writeFile(filePath, message ?? '');
-  return `${req.protocol}://${req.get('host')}/read/${id}`;
-}
-
-async function burnAfterRead(req: Request, res: Response, next: NextFunction): Promise<void> {
-  const filePath = path.join(messagesDir, `${req.params.id}.txt`);
-  try {
-    res.locals.content = await readFile(filePath, 'utf8');
-    await unlink(filePath);         
-    return next();
-  } catch {
-		res.render('read.njk', { content: 'Message not found or deleted.' })
-  }
-}
 
 
 // Routes
-app.get('/', (_req, res) => {
+app.get('/', (req, res) => {
   res.render('home.njk');
 });
 
 app.post('/create-message', async (req, res) => {
-  const link = await createMessage(req);
-  res.render('create-message.njk', { link });
-});
+	const id = uuidv4()
+	const fileName = `${id}${FILE_SUFFIX}`
+	const filePath = path.join(FILE_DIR, fileName)
+	const fileUrl = `${req.protocol}://${req.get('host')}/read-message/${id}`;
 
-app.get('/read/:id', burnAfterRead, (req, res) => {
-  res.render('read.njk', { content: res.locals.content });
-});
+	try {
+		const { message, password } = req.body
+		const payload = { message, password }
 
+		await writeFile(filePath, JSON.stringify(payload));
+		res.render('link.njk', {fileUrl})
+	} catch (error) {
+		console.error(error)
+		res.render('link.njk', { fileUrl: 'Error saving message.' });
+	}
+})
+
+
+app.get('/enter-password/:id', (req, res) => {
+	const id = req.params.id
+	res.redirect(`read-message/:${id}}`)
+})
+
+app.get('/read-message/:id', async (req, res) => {
+	const id = req.params.id
+	res.render('enter-password.njk', {id})
+})
+
+app.post('/authentication/:id', async (req, res) => {
+	const id = req.params.id;
+	const inputPassword = req.body.password;
+	const filePath = path.join(FILE_DIR, `${id}${FILE_SUFFIX}`);
+
+	try {
+		const fileContent = await readFile(filePath, 'utf8');
+		const file = JSON.parse(fileContent);
+
+		if (inputPassword !== file.password) {
+			return res.render('enter-password.njk', { id, error: 'Incorrect password' });
+		}
+
+		await unlink(filePath);
+		res.render('read-message.njk', { message: file.message });
+	} catch (error) {
+		console.error(error);
+		res.render('enter-password.njk', { id, error: 'Message not found.' });
+	}
+});
 
 
 // Start app on port
