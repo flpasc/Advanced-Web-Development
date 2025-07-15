@@ -9,7 +9,7 @@
     />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Clean Blog - Start Bootstrap Theme</title>
+    <title>Admin Dashboard</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Font Awesome icons (free version)-->
     <script
@@ -29,11 +29,13 @@
     />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="/css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/main.css">
+
   </head>
   <body>
-    {% include "partials/navbar.njk" %}
+    {% include "partials/admin-navbar.njk" %}
     {% block header %}
-      {% include "partials/header.njk" %}
+      {% include "partials/admin-header.njk" %}
     {% endblock %}
     {% block body %}
     {% endblock %}

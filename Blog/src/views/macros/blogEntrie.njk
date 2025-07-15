@@ -1,0 +1,12 @@
+{% macro blogEntrie(title, image, author, createdAt, teaser, content) %}
+<div class="blog-post">
+  <img class="blog-post-image" src="/assets/images/{{ image }}"></>
+  <div class="blog-post-details">
+    <div class="blog-post-title">{{ title }}</div>
+    <div class="blog-post-teaser">{{ teaser }}</div>
+    <div class="blog-post-author">{{ author }}</div>
+    <div class="blog-post-date">{{ createdAt }}</div>
+    <div class="blog-post-content">{{ content }}</div>
+  </div>
+</div>
+{% endmacro %}

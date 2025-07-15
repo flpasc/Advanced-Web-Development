@@ -1,0 +1,18 @@
+{% from './macros/blogEntrie.njk' import blogEntrie %}
+{% extends "./_adminLayout.njk" %}
+
+{% block body %}
+  <h1>ADMIN DASHBOARD</h1>
+  <div class="blog-entries">
+    {% for blogPost in blogEntries %}
+      {{ blogEntrie(
+        title=blogPost.title,
+        image=blogPost.image,
+        author=blogPost.author,
+        createdAt=blogPost.createdAt,
+        teaser=blogPost.teaser,
+        content=blogPost.content
+      ) }}
+    {% endfor %}
+  </div>
+{% endblock %}
