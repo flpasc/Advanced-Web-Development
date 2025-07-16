@@ -1,0 +1,34 @@
+{% from "./macros/quillEditor.njk" import quillEditor %}
+
+{% extends "./_adminLayout.njk" %}
+
+{% block body %}
+
+  <div class="post-add-container">
+    <form method="POST" action="/admin/add-new-entry/">
+      <div class="post-add-title">
+        <div class="post-add-label">Title: </div>
+        <input class="post-add-input" name="title" value="{{ title }}" />
+      </div>
+  
+      <div class="post-add-image">
+        <div class="post-add-label">Image: </div>
+        <input class="post-add-input" name="image" value="{{ image }}" />
+      </div>
+  
+      <div class="post-add-author">
+        <div class="post-add-label">Author: </div>
+        <input class="post-add-input" name="author" value="{{ author }}" />
+      </div>
+  
+      <div class="post-add-teaser">
+        <div class="post-add-label">Teaser: </div>
+        <input class="post-add-input" name="teaser" value="{{ teaser }}" />
+      </div>
+  
+      {{ quillEditor("content", content='New Post') }}
+     
+      <button type="submit">Save New Post</button>
+    </form>
+  </div>
+{% endblock %}

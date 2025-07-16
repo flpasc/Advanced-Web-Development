@@ -1,12 +1,33 @@
-{% macro blogEntrie(title, image, author, createdAt, teaser, content) %}
+{% macro blogEntrie(title, image, author, createdAt, teaser, content, slug) %}
 <div class="blog-post">
   <img class="blog-post-image" src="/assets/images/{{ image }}"></>
   <div class="blog-post-details">
-    <div class="blog-post-title">{{ title }}</div>
-    <div class="blog-post-teaser">{{ teaser }}</div>
-    <div class="blog-post-author">{{ author }}</div>
-    <div class="blog-post-date">{{ createdAt }}</div>
-    <div class="blog-post-content">{{ content }}</div>
+    <div class="blog-post-content">
+      <div class="blog-post-label">Title: </div>
+      <div class="blog-post-title">{{ title }}</div>
+    </div>
+    <div class="blog-post-content"> 
+      <div class="blog-post-label">Teaser: </div>
+      <div class="blog-post-teaser">{{ teaser }}</div>
+    </div>
+    <div class="blog-post-content"> 
+      <div class="blog-post-label">Author: </div>
+      <div class="blog-post-author">{{ author }}</div>
+    </div>
+    <div class="blog-post-content">  
+      <div class="blog-post-label">Date: </div>
+      <div class="blog-post-timestamp">{{ createdAt }}</div>
+    </div>
+    <div class="blog-post-content">  
+      <div class="blog-post-label">Content: </div>
+      <div class="blog-post-blog-content">{{ content }}</div>
+    </div>
+  </div>
+  <div class="blog-post-edit">
+    <form method="POST", action="/admin/delete-post/{{ slug }}">
+    <a href="/admin/edit-post/{{ slug }}" class="button">Edit</a>
+    <button type="submit">Delete</>
+    </form>
   </div>
 </div>
 {% endmacro %}

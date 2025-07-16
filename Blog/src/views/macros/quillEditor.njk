@@ -1,0 +1,27 @@
+{% macro quillEditor(name, content = "") %}
+  <input type="hidden" name="{{ name }}" value="{{ content | safe }}" />
+  <div id="editor">{{ content | safe }}</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const editorElement = document.querySelector('#editor');
+      if (editorElement) {
+        const quill = new Quill(editorElement, {
+          theme: 'snow'
+        });
+
+        const contentInput = document.querySelector('input[name="{{ name }}"]');
+        if (contentInput) {
+          quill.root.innerHTML = contentInput.value;
+
+          const form = editorElement.closest('form');
+          if (form) {
+            form.addEventListener('submit', () => {
+              contentInput.value = quill.root.innerHTML;
+            });
+          }
+        }
+      }
+    });
+  </script>
+{% endmacro %}

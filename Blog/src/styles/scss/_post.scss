@@ -1,1 +1,53 @@
+.blog-post {
+  display: flex;
+  flex-direction: row;
+  margin: 30px 60px;
+  height: 250px;
+  padding: 10px;
+  background-color: rgb(187, 187, 187);
+  border-radius: 5px;
 
+  button {
+    width: 80px;
+  }
+
+  &-details {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  &-label {
+    width: 100px;
+    flex-shrink: 0;
+  }
+
+  &-image {
+    object-fit: fill;
+    max-width: 300px;
+    margin-right: 20px;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-block: 2px;
+  }
+
+  &-teaser {
+    overflow: hidden;
+    height: 36px;
+  }
+
+  &-edit {
+    padding: 10px;
+
+    a {
+      display: block;
+      padding: 10px;
+      height: 40px;
+    }
+  }
+}

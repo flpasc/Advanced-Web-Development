@@ -5,6 +5,8 @@ export interface BlogEntry {
   createdAt: number;
   teaser: string;
   content: string;
+  slug: string;
+  formatedDate: string;
 }
 
 type BlogEntries = BlogEntry[];

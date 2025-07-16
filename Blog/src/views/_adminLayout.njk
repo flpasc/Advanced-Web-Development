@@ -30,6 +30,8 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="/css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
   </head>
   <body>
@@ -37,8 +39,10 @@
     {% block header %}
       {% include "partials/admin-header.njk" %}
     {% endblock %}
-    {% block body %}
-    {% endblock %}
+    <div class="body-container">
+      {% block body %}
+      {% endblock %}
+    </div>
     {% include 'partials/footer.njk' %}
     {% include 'partials/scripts.njk' %}
   </body>

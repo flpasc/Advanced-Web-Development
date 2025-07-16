@@ -2,16 +2,17 @@
 {% extends "./_adminLayout.njk" %}
 
 {% block body %}
-  <h1>ADMIN DASHBOARD</h1>
   <div class="blog-entries">
+    <a href="/admin/add-new-entry" class="button">Add New Post</a>
     {% for blogPost in blogEntries %}
       {{ blogEntrie(
         title=blogPost.title,
         image=blogPost.image,
         author=blogPost.author,
-        createdAt=blogPost.createdAt,
+        createdAt=blogPost.formatedDate,
         teaser=blogPost.teaser,
-        content=blogPost.content
+        content=blogPost.content,
+        slug=blogPost.slug
       ) }}
     {% endfor %}
   </div>

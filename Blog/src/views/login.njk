@@ -1,0 +1,18 @@
+{% extends "./_adminLayout.njk" %}
+
+{% block body %}
+    <form method="POST" action="/login">
+      <div class="login-container">
+        <div class="">
+          <div class="login-username">Username: </div>
+          <input class="login-username-input" name="username" />
+        </div>
+    
+        <div class="">
+          <div class="login-password">Password: </div>
+          <input class="login-password" name="password" />
+        </div>
+        <button type="submit">Login</button>
+      </div>
+    </form>
+{% endblock %}
