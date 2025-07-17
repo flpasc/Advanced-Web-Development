@@ -19,6 +19,7 @@ export const editEntry = async (req: Request, res: Response) => {
   const slug = req.params.id;
   const blogEntries = await getAllBlogEntries();
   const blogPost = blogEntries.find((entry) => entry.slug === slug);
+
   if (!blogPost) return res.status(404).send("entry not found");
 
   res.render("edit-post.njk", {

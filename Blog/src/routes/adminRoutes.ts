@@ -6,11 +6,8 @@ import {
   deleteEntry,
   addNewEntry,
   showNewEntryForm,
-  adminLogin,
-  getLoginForm,
-  adminLogout,
 } from "../controller/adminController";
-import { authentication } from "../middlewares/authentication";
+import { authentication } from "../middlewares/authenticationMiddleware";
 
 const router = express.Router();
 router
