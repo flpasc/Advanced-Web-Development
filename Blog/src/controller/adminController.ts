@@ -75,6 +75,7 @@ export const adminLogin = async (req: Request, res: Response) => {
     // @ts-ignore
     req.session.isAdmin = true;
     res.redirect("/admin");
+    console.log(req.session);
   } else {
     res.redirect("/admin/login");
   }
@@ -85,6 +86,6 @@ export const adminLogout = async (req: Request, res: Response) => {
     if (error) {
       console.error("Error destroying session", error);
     }
-    res.redirect("/admin/login");
+    res.redirect("/login");
   });
 };
