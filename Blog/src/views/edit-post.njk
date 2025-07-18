@@ -3,7 +3,7 @@
 
 {% block body %}
   <div class="post-edit-container">
-    <form method="POST" action="/admin/edit-post/{{ slug }}">
+    <form method="POST" action="/admin/edit-post/{{ id }}">
       <div class="post-edit-title">
         <div class="post-edit-label">Title: </div>
         <input class="post-edit-input" name="title" value="{{ title }}" />

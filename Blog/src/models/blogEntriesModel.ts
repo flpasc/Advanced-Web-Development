@@ -1,76 +1,100 @@
-import { readFile, writeFile } from "node:fs/promises";
-import * as path from "path";
 import { BlogEntries, BlogEntry } from "../types/models";
-import { createSlug } from "../utils/createSlug";
-import { formatDate } from "../utils/dateHelper";
-
-const FILE_PATH = path.join(__dirname, "..", "data", "blogPosts.json");
+import { getDB } from "../database";
 
 export async function getAllBlogEntries(): Promise<BlogEntries> {
-  try {
-    const blogEntries = await readFile(FILE_PATH, { encoding: "utf-8" });
-    if (!blogEntries) return [];
-    return JSON.parse(blogEntries).map((entry: BlogEntry) => ({
-      ...entry,
-      slug: entry.slug || createSlug(entry.title),
-      formatedDate: entry.formatedDate || formatDate(entry.createdAt),
-    }));
-  } catch (error) {
-    console.error("Error retriving block entries", error);
-    return [];
-  }
+  const db = getDB();
+
+  return new Promise((resolve, reject) => {
+    db.all<BlogEntry>(
+      `SELECT * FROM blog_entries`,
+      [],
+      (error: Error | null, rowData: BlogEntries) => {
+        if (error) reject(error);
+        else {
+          resolve(rowData);
+        }
+      },
+    );
+  });
 }
 
-export async function saveAllBlogEntries(entries: BlogEntries): Promise<void> {
-  try {
-    await writeFile(FILE_PATH, JSON.stringify(entries));
-  } catch (error) {
-    console.error("Couldnt save due to error: ", error);
-  }
+export async function getBlogEntryById(postId: number): Promise<BlogEntry> {
+  const db = getDB();
+  return new Promise((resolve, reject) => {
+    db.get(
+      `SELECT * FROM blog_entries WHERE id = ?`,
+      [postId],
+      (error, rowData: BlogEntry) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(rowData);
+        }
+      },
+    );
+  });
 }
 
 export async function updateBlogEntry(
-  slug: string,
+  postId: number,
   data: Partial<BlogEntry>,
 ): Promise<void> {
-  try {
-    const entries = await getAllBlogEntries();
-    const index = entries.findIndex((entry) => entry.slug === slug);
+  const db = getDB();
+  const createdAt = data.createdAt ?? Math.floor(Date.now() / 1000);
 
-    entries[index] = { ...entries[index], ...data };
-
-    await saveAllBlogEntries(entries);
-  } catch (error) {}
+  return new Promise((resolve, reject) => {
+    db.run(
+      `UPDATE blog_entries SET title = ?,image = ?, author = ?, teaser = ?, content = ?, createdAt = ? WHERE id = ?`,
+      [
+        data.title,
+        data.image,
+        data.author,
+        data.teaser,
+        data.content,
+        createdAt,
+        postId,
+      ],
+      function (error) {
+        if (error) reject(error);
+        else resolve();
+      },
+    );
+  });
 }
 
-export async function deleteBlogEntry(slug: string): Promise<void> {
-  try {
-    const blogPosts = await getAllBlogEntries();
-    const updatedPosts = blogPosts.filter((post) => post.slug !== slug);
-
-    await saveAllBlogEntries(updatedPosts);
-  } catch (error) {}
+export async function deleteBlogEntryById(postId: number): Promise<void> {
+  const db = getDB();
+  return new Promise((resolve, reject) => {
+    db.run(
+      `DELETE FROM blog_entries WHERE id = ? `,
+      [postId],
+      function (error) {
+        if (error) reject(error);
+        else resolve();
+      },
+    );
+  });
 }
 
 export async function addBlogEntry(entry: Partial<BlogEntry>) {
+  const db = getDB();
   const createdAt = Math.floor(Date.now() / 1000);
 
-  try {
-    const entries = await getAllBlogEntries();
-    const newEntry: BlogEntry = {
-      title: entry.title || "Unknown",
-      image: entry.image || "default-bg",
-      author: entry.author || "Unknown author",
-      teaser: entry.teaser || "",
-      content: entry.content || "",
-      slug: createSlug(entry.title || ""),
-      createdAt: createdAt,
-      formatedDate: formatDate(createdAt),
-    };
-
-    entries.push(newEntry);
-    await saveAllBlogEntries(entries);
-  } catch (error) {
-    console.error("Canot save new post: ", error);
-  }
+  return new Promise((resolve, reject) => {
+    db.run(
+      `INSERT INTO blog_entries (title, image, author, teaser, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)`,
+      [
+        entry.title,
+        entry.image,
+        entry.author,
+        entry.teaser,
+        entry.content,
+        createdAt,
+      ],
+      function (error) {
+        if (error) reject(error);
+        else resolve({ id: this.lastID });
+      },
+    );
+  });
 }

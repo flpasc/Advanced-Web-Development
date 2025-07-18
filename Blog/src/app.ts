@@ -7,8 +7,10 @@ import path from "path";
 import publicRouter from "./routes/publicRoutes";
 import adminRouter from "./routes/adminRoutes";
 import session from "express-session";
+import { closeDB, connectDB } from "./database";
 
 const app = express();
+const port = process.env.PORT || 3333;
 app.use(cors());
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.urlencoded({ extended: true }));
@@ -25,10 +27,26 @@ nunjucks.configure("src/views/", {
   express: app,
 });
 
-const port = process.env.PORT || 3333;
+connectDB()
+  .then(() => {
+    app.use(publicRouter).use("/admin", adminRouter); // let router manage auth inside
 
-app.use(publicRouter).use("/admin", adminRouter); // let router manage auth inside
+    app.listen(port, () => {
+      console.log(`Listening on port: ${port}`);
+    });
+  })
+  .catch((error: Error) => {
+    console.error("Could not start DB: ", error);
+  });
 
-app.listen(port, () => {
-  console.log(`Listening on port: ${port}`);
+process.on("SIGINT", async () => {
+  console.log("SIGINT received. Closing database connection...");
+  await closeDB();
+  process.exit(0);
+});
+
+process.on("SIGTERM", async () => {
+  console.log("SIGTERM received. Closing database connection...");
+  await closeDB();
+  process.exit(0);
 });

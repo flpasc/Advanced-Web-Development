@@ -1,15 +1,11 @@
 import type { Request, Response } from "express";
 import { formatDate } from "../utils/dateHelper";
-import { getAllBlogEntries } from "../models/blogEntriesModel";
+import { getBlogEntryById } from "../models/blogEntriesModel";
 
 export const postsController = async (req: Request, res: Response) => {
-  const postSlug = req.params.id;
-  const blogPosts = await getAllBlogEntries();
-  let postId = blogPosts.findIndex((blogPost) => blogPost.slug === postSlug);
+  const postId = Number(req.params.id);
+  const post = await getBlogEntryById(postId);
 
-  if (postId === -1) postId = 1;
-
-  const post = blogPosts[postId];
   res.render("post.njk", {
     postTitle: post.title,
     postSubheading: post.teaser,

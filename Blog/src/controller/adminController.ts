@@ -2,13 +2,15 @@ import sanitizeHtml from "sanitize-html";
 import type { Request, Response } from "express";
 import {
   addBlogEntry,
-  deleteBlogEntry,
+  deleteBlogEntryById,
   getAllBlogEntries,
+  getBlogEntryById,
   updateBlogEntry,
 } from "../models/blogEntriesModel";
 
 export const entriesListing = async (req: Request, res: Response) => {
   const blogEntries = await getAllBlogEntries();
+  console.log(blogEntries);
   res.render("dashboard.njk", {
     title: "Admin Dashboard",
     blogEntries,
@@ -16,27 +18,23 @@ export const entriesListing = async (req: Request, res: Response) => {
 };
 
 export const editEntry = async (req: Request, res: Response) => {
-  const slug = req.params.id;
-  const blogEntries = await getAllBlogEntries();
-  const blogPost = blogEntries.find((entry) => entry.slug === slug);
-
+  const id = Number(req.params.id);
+  const blogPost = await getBlogEntryById(id);
   if (!blogPost) return res.status(404).send("entry not found");
 
   res.render("edit-post.njk", {
     title: blogPost.title,
     image: blogPost.image,
     author: blogPost.author,
-    createdAt: blogPost.formatedDate,
     teaser: blogPost.teaser,
     content: blogPost.content,
-    slug: blogPost.slug,
+    id,
   });
 };
 
 export const updateEntry = async (req: Request, res: Response) => {
-  const slug = req.params.id;
-  console.log(req.body);
-  await updateBlogEntry(slug, {
+  const id = Number(req.params.id);
+  await updateBlogEntry(id, {
     ...req.body,
     content: sanitizeHtml(req.body.content),
   });
@@ -44,8 +42,8 @@ export const updateEntry = async (req: Request, res: Response) => {
 };
 
 export const deleteEntry = async (req: Request, res: Response) => {
-  const slug = req.params.id;
-  await deleteBlogEntry(slug);
+  const id = Number(req.params.id);
+  await deleteBlogEntryById(id);
   res.redirect("/admin");
 };
 

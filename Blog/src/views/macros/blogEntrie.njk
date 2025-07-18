@@ -1,4 +1,4 @@
-{% macro blogEntrie(title, image, author, createdAt, teaser, content, slug) %}
+{% macro blogEntrie(title, image, author, createdAt, teaser, content, id) %}
 <div class="blog-post">
   <img class="blog-post-image" src="/assets/images/{{ image }}"></>
   <div class="blog-post-details">
@@ -24,8 +24,8 @@
     </div>
   </div>
   <div class="blog-post-edit">
-    <form method="POST", action="/admin/delete-post/{{ slug }}">
-    <a href="/admin/edit-post/{{ slug }}" class="button">Edit</a>
+    <form method="POST", action="/admin/delete-post/{{ id }}">
+    <a href="/admin/edit-post/{{ id }}" class="button">Edit</a>
     <button type="submit">Delete</>
     </form>
   </div>
