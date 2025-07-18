@@ -7,7 +7,6 @@ export async function getAllBlogEntries(
   offset: number,
 ): Promise<BlogEntries> {
   const db = getDB();
-
   return new Promise((resolve, reject) => {
     db.all<BlogEntry>(
       `SELECT * FROM blog_entries ORDER BY createdAt DESC LIMIT ? OFFSET ?`,
@@ -26,7 +25,6 @@ export async function getAllBlogEntriesByAuthor(
   id: number,
 ): Promise<BlogEntry[]> {
   const db = getDB();
-
   return new Promise((resolve, reject) => {
     db.all(
       `SELECT blog_entries.*, blog_authors.name AS author_name
@@ -68,7 +66,6 @@ export async function updateBlogEntry(
 ): Promise<void> {
   const db = getDB();
   const createdAt = data.createdAt ?? Math.floor(Date.now() / 1000);
-
   return new Promise((resolve, reject) => {
     db.run(
       `UPDATE blog_entries SET title = ?,image = ?, author = ?, teaser = ?, content = ?, createdAt = ? WHERE id = ?`,
@@ -81,7 +78,7 @@ export async function updateBlogEntry(
         createdAt,
         postId,
       ],
-      function (error) {
+      (error) => {
         if (error) reject(error);
         else resolve();
       },
@@ -92,21 +89,16 @@ export async function updateBlogEntry(
 export async function deleteBlogEntryById(postId: number): Promise<void> {
   const db = getDB();
   return new Promise((resolve, reject) => {
-    db.run(
-      `DELETE FROM blog_entries WHERE id = ? `,
-      [postId],
-      function (error) {
-        if (error) reject(error);
-        else resolve();
-      },
-    );
+    db.run(`DELETE FROM blog_entries WHERE id = ? `, [postId], (error) => {
+      if (error) reject(error);
+      else resolve();
+    });
   });
 }
 
 export async function addBlogEntry(entry: Partial<BlogEntry>) {
   const db = getDB();
   const createdAt = Math.floor(Date.now() / 1000);
-
   return new Promise((resolve, reject) => {
     db.run(
       `INSERT INTO blog_entries (title, image, author_id, teaser, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)`,
