@@ -10,13 +10,18 @@ import {
 import { formatDate } from "../utils/dateHelper";
 
 export const entriesListing = async (req: Request, res: Response) => {
-  const blogEntries = await getAllBlogEntries();
+  const limit = Number(req.query.limit) || 10;
+  const page = Number(req.query.page) || 1;
+  const offset = (page - 1) * limit;
+
+  const blogEntries = await getAllBlogEntries(limit, offset);
   res.render("dashboard.njk", {
     title: "Admin Dashboard",
     blogEntries: blogEntries.map((post) => ({
       ...post,
       formatedDate: formatDate(post.createdAt),
     })),
+    currentPage: page,
   });
 };
 

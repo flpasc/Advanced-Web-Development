@@ -15,5 +15,12 @@
         id=blogPost.id
       ) }}
     {% endfor %}
+    <div class="d-flex justify-content-between mb-4">
+      {% if currentPage > 1 %}
+        <a class="btn btn-primary text-uppercase" href="/admin/?page={{ currentPage - 1 }}&limit={{ limit }}">← Newer Posts</a>
+      {% endif %}
+    
+      <a class="btn btn-primary text-uppercase" href="/admin/?page={{ currentPage + 1 }}&limit={{ limit }}">Older Posts →</a>
+    </div>
   </div>
 {% endblock %}

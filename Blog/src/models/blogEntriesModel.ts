@@ -1,13 +1,16 @@
 import { BlogEntries, BlogEntry } from "../types/models";
 import { getDB } from "../database";
 
-export async function getAllBlogEntries(): Promise<BlogEntries> {
+export async function getAllBlogEntries(
+  limit: number,
+  offset: number,
+): Promise<BlogEntries> {
   const db = getDB();
 
   return new Promise((resolve, reject) => {
     db.all<BlogEntry>(
-      `SELECT * FROM blog_entries`,
-      [],
+      `SELECT * FROM blog_entries ORDER BY createdAt DESC LIMIT ? OFFSET ?`,
+      [limit, offset],
       (error: Error | null, rowData: BlogEntries) => {
         if (error) reject(error);
         else {
