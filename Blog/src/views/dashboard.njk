@@ -3,18 +3,30 @@
 
 {% block body %}
   <div class="blog-entries">
-    <a href="/admin/add-new-entry" class="button">Add New Post</a>
+    <a href="/admin/add-new-entry" class="add-button">Add New Post</a>
+
+    <form action="/", method="GET">
+      <select name="author_filter" id="author-filter" onchange="this.form.submit()">
+        <option value="">--Please Select an option</option>
+        {% for author in authors %}
+          <option value="{{ author.id }}">{{ author.name }}</option>
+        {% endfor %}
+      </select>
+    </form>
+    
+
     {% for blogPost in blogEntries %}
       {{ blogEntrie(
         title=blogPost.title,
         image=blogPost.image,
-        author=blogPost.author,
+        author=blogPost.author_id,
         createdAt=blogPost.formatedDate,
         teaser=blogPost.teaser,
         content=blogPost.content,
         id=blogPost.id
       ) }}
     {% endfor %}
+
     <div class="d-flex justify-content-between mb-4">
       {% if currentPage > 1 %}
         <a class="btn btn-primary text-uppercase" href="/admin/?page={{ currentPage - 1 }}&limit={{ limit }}">← Newer Posts</a>

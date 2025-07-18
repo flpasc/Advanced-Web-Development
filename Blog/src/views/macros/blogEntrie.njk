@@ -1,33 +1,26 @@
 {% macro blogEntrie(title, image, author, createdAt, teaser, content, id) %}
-<div class="blog-post">
-  <img class="blog-post-image" src="/assets/images/{{ image }}"></>
-  <div class="blog-post-details">
-    <div class="blog-post-content">
-      <div class="blog-post-label">Title: </div>
-      <div class="blog-post-title">{{ title }}</div>
-    </div>
-    <div class="blog-post-content"> 
-      <div class="blog-post-label">Teaser: </div>
-      <div class="blog-post-teaser">{{ teaser }}</div>
-    </div>
-    <div class="blog-post-content"> 
-      <div class="blog-post-label">Author: </div>
-      <div class="blog-post-author">{{ author }}</div>
-    </div>
-    <div class="blog-post-content">  
-      <div class="blog-post-label">Date: </div>
-      <div class="blog-post-timestamp">{{ createdAt }}</div>
-    </div>
-    <div class="blog-post-content">  
-      <div class="blog-post-label">Content: </div>
-      <div class="blog-post-blog-content">{{ content }}</div>
-    </div>
+<div class="post-preview">
+  <div>
+    <a href="posts/{{ id }}">
+      <h2 class="post-title">{{ title }}</h2>
+      <h3 class="post-subtitle">{{ teaser }}</h3>
+    </a>
+    <p class="post-meta">
+      Posted by
+      <a href="#!">{{ author }}</a>
+      on {{ formatedDate }}
+    </p>
   </div>
-  <div class="blog-post-edit">
-    <form method="POST", action="/admin/delete-post/{{ id }}">
-    <a href="/admin/edit-post/{{ id }}" class="button">Edit</a>
-    <button type="submit">Delete</>
+  
+  <div class="blog-post-edit"> <form action="/admin/edit-post/{{ id }}">
+      <button type="submit">Edit</button>
+    </form>
+    <form method="POST" action="/admin/delete-post/{{ id }}">
+      <button type="submit">Delete</>
     </form>
   </div>
 </div>
+
+<!-- Divider-->
+<hr class="my-4" />
 {% endmacro %}

@@ -1,5 +1,6 @@
 import { BlogEntries, BlogEntry } from "../types/models";
 import { getDB } from "../database";
+import { Authors } from "../types/authors";
 
 export async function getAllBlogEntries(
   limit: number,
@@ -15,6 +16,30 @@ export async function getAllBlogEntries(
         if (error) reject(error);
         else {
           resolve(rowData);
+        }
+      },
+    );
+  });
+}
+
+export async function getAllBlogEntriesByAuthor(
+  id: number,
+): Promise<BlogEntry[]> {
+  const db = getDB();
+
+  console.log("MODEL: ", id);
+  return new Promise((resolve, reject) => {
+    db.all(
+      `SELECT blog_entries.*, blog_authors.name AS author_name
+       FROM blog_entries
+       JOIN blog_authors ON blog_entries.id = blog_authors.id
+       WHERE blog_authors.id = ?`,
+      [id],
+      (error, rows: BlogEntries) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(rows);
         }
       },
     );
@@ -85,7 +110,7 @@ export async function addBlogEntry(entry: Partial<BlogEntry>) {
 
   return new Promise((resolve, reject) => {
     db.run(
-      `INSERT INTO blog_entries (title, image, author, teaser, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO blog_entries (title, image, author_id, teaser, content, createdAt) VALUES (?, ?, ?, ?, ?, ?)`,
       [
         entry.title,
         entry.image,

@@ -1,3 +1,28 @@
+.post-preview {
+  display: flex;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 20px 40px;
+  min-width: 80%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.blog-post-edit {
+  button {
+    width: 80px;
+    margin-block: 5px;
+    border-radius: 10px;
+  }
+}
+
+.add-button {
+  margin: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px 30px;
+}
+
 .blog-post {
   display: flex;
   flex-direction: row;

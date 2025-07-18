@@ -5,6 +5,15 @@
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
         <!-- Post preview-->
+        <form action="/" method="GET">
+          <select name="author_filter" id="author-filter" onchange="this.form.submit()">
+            <option value="">--Please Select an option</option>
+            {% for author in authors %}
+              <option value="{{ author.id }}">{{ author.name }}</option>
+            {% endfor %}
+          </select>
+        </form>
+
         {% for blogPost in blogPosts %}
           <div class="post-preview">
             <a href="posts/{{ blogPost.id }}">
@@ -13,7 +22,7 @@
             </a>
             <p class="post-meta">
               Posted by
-              <a href="#!">{{ blogPost.author }}</a>
+              <a href="#!">{{ blogPost.author_id }}</a>
               on {{ blogPost.formatedDate }}
             </p>
           </div>

@@ -4,17 +4,29 @@ import {
   addBlogEntry,
   deleteBlogEntryById,
   getAllBlogEntries,
+  getAllBlogEntriesByAuthor,
   getBlogEntryById,
   updateBlogEntry,
 } from "../models/blogEntriesModel";
 import { formatDate } from "../utils/dateHelper";
+import { addAuthor, getAllAuthors } from "../models/authorsModel";
 
 export const entriesListing = async (req: Request, res: Response) => {
   const limit = Number(req.query.limit) || 10;
   const page = Number(req.query.page) || 1;
   const offset = (page - 1) * limit;
+  const authors = await getAllAuthors();
+  const filter = req.query.author_filter
+    ? Number(req.query.author_filter)
+    : undefined;
+  let blogEntries;
 
-  const blogEntries = await getAllBlogEntries(limit, offset);
+  if (!filter) {
+    blogEntries = await getAllBlogEntries(limit, offset);
+  } else {
+    blogEntries = await getAllBlogEntriesByAuthor(filter);
+  }
+
   res.render("dashboard.njk", {
     title: "Admin Dashboard",
     blogEntries: blogEntries.map((post) => ({
@@ -22,6 +34,7 @@ export const entriesListing = async (req: Request, res: Response) => {
       formatedDate: formatDate(post.createdAt),
     })),
     currentPage: page,
+    authors,
   });
 };
 
@@ -61,6 +74,7 @@ export const addNewEntry = async (req: Request, res: Response) => {
     ...entryData,
     content: sanitizeHtml(entryData.content),
   });
+  await addAuthor(entryData.author);
   res.redirect("/admin");
 };
 

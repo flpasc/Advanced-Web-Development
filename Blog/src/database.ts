@@ -18,16 +18,36 @@ export function connectDB(): Promise<sqlite3.Database> {
           reject(err);
         } else {
           console.log("Connected to the SQLite database.");
+          // Posts table
           db!.run(
             `
                     CREATE TABLE IF NOT EXISTS blog_entries (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         title TEXT NOT NULL,
                         teaser TEXT NOT NULL,
-                        author TEXT NOT NULL,
+                        author_id INTEGER NOT NULL,
                         createdAt TEXT NOT NULL,
                         image TEXT NOT NULL,
-                        content TEXT NOT NULL
+                        content TEXT NOT NULL,
+                        FOREIGN KEY (author_id) REFERENCES blog_authors(id) ON DELETE CASCADE
+                    )
+                `,
+            (createErr: Error | null) => {
+              if (createErr) {
+                console.error("Error creating table:", createErr.message);
+                reject(createErr);
+              } else {
+                console.log("Blog table checked/created.");
+                resolve(db as sqlite3.Database);
+              }
+            },
+          );
+          // Author table
+          db!.run(
+            `
+                    CREATE TABLE IF NOT EXISTS blog_authors (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL
                     )
                 `,
             (createErr: Error | null) => {
