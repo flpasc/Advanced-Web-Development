@@ -27,7 +27,6 @@ export async function getAllBlogEntriesByAuthor(
 ): Promise<BlogEntry[]> {
   const db = getDB();
 
-  console.log("MODEL: ", id);
   return new Promise((resolve, reject) => {
     db.all(
       `SELECT blog_entries.*, blog_authors.name AS author_name
