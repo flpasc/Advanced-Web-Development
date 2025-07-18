@@ -7,13 +7,16 @@ import {
   getBlogEntryById,
   updateBlogEntry,
 } from "../models/blogEntriesModel";
+import { formatDate } from "../utils/dateHelper";
 
 export const entriesListing = async (req: Request, res: Response) => {
   const blogEntries = await getAllBlogEntries();
-  console.log(blogEntries);
   res.render("dashboard.njk", {
     title: "Admin Dashboard",
-    blogEntries,
+    blogEntries: blogEntries.map((post) => ({
+      ...post,
+      formatedDate: formatDate(post.createdAt),
+    })),
   });
 };
 
