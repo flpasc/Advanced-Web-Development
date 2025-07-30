@@ -2,8 +2,8 @@ name: Gitbu continues integration test
 
 on: 
   push: 
-    on-branch: main
-  pull:
+    on-branch: [main]
+  pull_request:
 
 jobs:
   test:
