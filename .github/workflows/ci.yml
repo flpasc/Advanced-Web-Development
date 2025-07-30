@@ -1,7 +1,9 @@
 name: Gitbu continues integration test
 
 on: 
-  push:
+  push: 
+    on-branch: main
+  pull:
 
 jobs:
   test:
@@ -23,4 +25,10 @@ jobs:
       - name: Run Test
         run: npm run test
         working-directory: nestjs-ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run build
+        run: npm run build
 
