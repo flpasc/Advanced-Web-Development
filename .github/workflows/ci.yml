@@ -28,7 +28,9 @@ jobs:
 
       - name: Run linter
         run: npm run lint
+        working-directory: nestjs-ci
 
       - name: Run build
         run: npm run build
+        working-directory: nestjs-ci
 
